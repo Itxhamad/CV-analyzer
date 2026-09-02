@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy Policy — AI CV Analyzer</title>
+<link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="/">AI CV Analyzer</a>
+</header>
+<main id="app" style="max-width:680px">
+  <h1 style="font-size:2rem">Privacy Policy</h1>
+  <p><em>Template — replace the bracketed operator details below before going live. This reflects the data flow actually implemented in this codebase; update it if you change that behavior.</em></p>
+
+  <h3>What we process</h3>
+  <p>When you upload a CV, the file is read into memory, validated, scanned for suspicious embedded content, and its text is extracted. The original file is written to temporary server storage under a randomly generated filename.</p>
+
+  <h3>Why</h3>
+  <p>The extracted CV text (plus any optional information or job description you provide) is sent to an AI provider (Groq and/or Google Gemini, depending on server configuration) solely to generate your analysis, score, and recommendations.</p>
+
+  <h3>Retention</h3>
+  <p>Uploaded files and extracted text are automatically and permanently deleted after <strong>[CV_RETENTION_MINUTES, default 30] minutes</strong>, whether or not you view your results. You can also delete your session immediately using "Start Over" or the delete endpoint. No database of CVs is kept; analysis results and sessions live only in server memory until they expire.</p>
+
+  <h3>AI providers</h3>
+  <p>Your CV text and any job description you paste in are sent to the configured AI provider(s) over an encrypted (HTTPS) connection to generate your analysis. We do not use your CV data to train our own models. Whether a third-party AI provider uses API input to train their models is governed by that provider's own terms — check the current Groq and Google Gemini API terms for details.</p>
+
+  <h3>What we don't do</h3>
+  <ul>
+    <li>We don't require an account, email, or phone number to use the analyzer.</li>
+    <li>We don't sell CV data.</li>
+    <li>We don't share your CV with employers or third parties.</li>
+    <li>We don't use your CV data to train our own AI models without your explicit, separate consent.</li>
+  </ul>
+
+  <h3>Your choices</h3>
+  <p>You can delete your session and uploaded file at any time before the automatic retention window ends. Because there is no account, we cannot retrieve or delete data after it has already expired or been deleted — at that point it is already gone.</p>
+
+  <p>Questions? Contact: <strong>[operator contact email]</strong></p>
+</main>
+<footer class="site-footer"><p><a href="/">Back to AI CV Analyzer</a></p></footer>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI CV Analyzer — Check Your Resume Score &amp; ATS Compatibility</title>
+<meta name="description" content="Upload your CV and get an AI-powered score, ATS compatibility analysis, job matching, and personalized recommendations." />
+<link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="/">AI CV Analyzer</a>
+  <span class="header-tag">No login required</span>
+</header>
+
+<main id="app">
+
+  <!-- ============ LANDING ============ -->
+  <section id="view-landing" class="view">
+    <div class="hero">
+      <div class="hero-copy">
+        <h1>Is Your CV Actually Good? Let AI Find Out.</h1>
+        <p class="hero-sub">Upload your CV and get an AI-powered score, ATS analysis, job-market feedback, and specific recommendations to improve your chances of getting hired.</p>
+        <button class="btn btn-primary btn-lg" id="btn-start">Analyze My CV</button>
+        <p class="hero-meta">No account required • Fast analysis • Privacy-focused</p>
+      </div>
+      <div class="hero-preview" aria-hidden="true">
+        <div class="preview-card">
+          <div class="preview-score">
+            <span class="preview-score-num">8.4</span><span class="preview-score-den">/10</span>
+          </div>
+          <p class="preview-label">Good — room to improve</p>
+          <div class="preview-bars">
+            <div class="preview-bar"><span>ATS</span><i style="width:78%"></i></div>
+            <div class="preview-bar"><span>Content</span><i style="width:65%"></i></div>
+            <div class="preview-bar"><span>Skills</span><i style="width:88%"></i></div>
+          </div>
+          <ul class="preview-list">
+            <li class="ok">Strong technical skill coverage</li>
+            <li class="warn">Bullets describe duties, not outcomes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UPLOAD ============ -->
+  <section id="view-upload" class="view hidden">
+    <h2>Upload your CV</h2>
+    <p class="view-sub">PDF, DOC, DOCX or TXT — up to 10MB.</p>
+
+    <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload your CV file">
+      <input type="file" id="file-input" accept=".pdf,.doc,.docx,.txt" hidden />
+      <p class="dropzone-title">Drag &amp; drop your CV here</p>
+      <p class="dropzone-sub">or</p>
+      <button class="btn btn-secondary" id="btn-browse">Browse Files</button>
+    </div>
+
+    <div id="file-info" class="file-info hidden">
+      <div class="file-info-row">
+        <div>
+          <p id="file-name" class="file-name"></p>
+          <p id="file-meta" class="file-meta"></p>
+        </div>
+        <div class="file-actions">
+          <button class="btn-text" id="btn-replace">Replace</button>
+          <button class="btn-text danger" id="btn-remove">Remove</button>
+        </div>
+      </div>
+      <div class="progress-track hidden" id="upload-progress-track">
+        <div class="progress-fill" id="upload-progress-fill"></div>
+      </div>
+    </div>
+
+    <div id="upload-error" class="alert alert-error hidden"></div>
+
+    <div class="actions-row">
+      <button class="btn-text" id="btn-back-to-landing">Back</button>
+      <button class="btn btn-primary" id="btn-continue-to-info" disabled>Continue</button>
+    </div>
+  </section>
+
+  <!-- ============ OPTIONAL INFO ============ -->
+  <section id="view-optional-info" class="view hidden">
+    <h2>Tell us a bit more <span class="optional-tag">(optional)</span></h2>
+    <p class="view-sub">Anything you add here helps sharpen the analysis. You can skip this entirely.</p>
+
+    <form id="optional-info-form" class="form-grid">
+      <label>Skills
+        <input type="text" name="skills" placeholder="e.g. Python, project management, Figma" />
+      </label>
+      <label>Target job title
+        <input type="text" name="targetJob" placeholder="e.g. Product Designer" />
+      </label>
+      <label>Experience level
+        <select name="experienceLevel">
+          <option value="">Select…</option>
+          <option value="student">Student / no experience yet</option>
+          <option value="entry">Entry level (0–2 years)</option>
+          <option value="mid">Mid level (3–5 years)</option>
+          <option value="senior">Senior (6–10 years)</option>
+          <option value="lead">Lead / Principal (10+ years)</option>
+        </select>
+      </label>
+      <label>Target location
+        <input type="text" name="targetLocation" placeholder="e.g. Remote, or a city" />
+      </label>
+      <label>Degree
+        <input type="text" name="degree" placeholder="e.g. BSc Computer Science" />
+      </label>
+      <label>Field of study
+        <input type="text" name="field" placeholder="e.g. Computer Science" />
+      </label>
+      <label>University
+        <input type="text" name="university" placeholder="e.g. State University" />
+      </label>
+      <label>Graduation year
+        <input type="text" name="graduationYear" placeholder="e.g. 2024" />
+      </label>
+      <label class="full-width">Job description <span class="optional-tag">(for job-match scoring)</span>
+        <textarea name="jobDescription" rows="6" placeholder="Paste a job description to get a match score and tailored keyword suggestions"></textarea>
+      </label>
+    </form>
+
+    <div id="analyze-error" class="alert alert-error hidden"></div>
+
+    <div class="actions-row">
+      <button class="btn-text" id="btn-back-to-upload">Back</button>
+      <div class="actions-right">
+        <button class="btn btn-secondary" id="btn-skip-analyze">Skip &amp; Analyze CV</button>
+        <button class="btn btn-primary" id="btn-analyze">Analyze with this info</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESSING ============ -->
+  <section id="view-processing" class="view hidden">
+    <div class="processing-box">
+      <div class="spinner" aria-hidden="true"></div>
+      <h2>Analyzing your CV</h2>
+      <ul class="steps">
+        <li id="step-upload">Uploading file</li>
+        <li id="step-parse">Reading &amp; parsing document</li>
+        <li id="step-analyze">Running AI analysis</li>
+        <li id="step-score">Calculating your score</li>
+      </ul>
+      <p class="processing-hint">This usually takes 10–30 seconds.</p>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="view-results" class="view hidden">
+    <div class="results-header">
+      <div class="score-hero">
+        <div class="score-ring" id="score-ring">
+          <span id="score-num">–</span><span class="score-den">/10</span>
+        </div>
+        <p id="score-label" class="score-label"></p>
+      </div>
+      <div class="results-actions">
+        <button class="btn btn-secondary" id="btn-download-pdf">Download PDF Report</button>
+        <button class="btn btn-secondary" id="btn-download-json">Download JSON</button>
+        <button class="btn-text" id="btn-start-over">Start Over</button>
+      </div>
+    </div>
+
+    <p id="overall-impression" class="overall-impression"></p>
+
+    <h3>Score Breakdown</h3>
+    <div id="breakdown-grid" class="breakdown-grid"></div>
+
+    <div id="job-match-section" class="section-block hidden">
+      <h3>Job Match</h3>
+      <div class="job-match-summary">
+        <div class="match-percent" id="match-percent">–%</div>
+        <div id="job-match-details"></div>
+      </div>
+    </div>
+
+    <h3>Top Priority Actions</h3>
+    <ol id="top-actions" class="top-actions"></ol>
+
+    <h3>Detailed Analysis</h3>
+    <div id="module-accordion" class="accordion"></div>
+
+    <h3>Recommendations</h3>
+    <div id="recommendations" class="recommendations"></div>
+
+    <div class="add-job-desc">
+      <button class="btn-text" id="btn-toggle-add-job">+ Add a job description to score against</button>
+      <div id="add-job-form" class="hidden">
+        <textarea id="add-job-textarea" rows="5" placeholder="Paste a job description…"></textarea>
+        <button class="btn btn-secondary" id="btn-run-job-match">Match Against This Job</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="global-error" class="alert alert-error hidden global-alert"></div>
+
+</main>
+
+<footer class="site-footer">
+  <p>AI CV Analyzer — analysis is AI-generated and estimated, not a guarantee of outcomes with any employer or ATS.</p>
+  <p><a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Service</a></p>
+</footer>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
